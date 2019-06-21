@@ -65,6 +65,7 @@ class PgQuery
   NULL_TEST = 'NullTest'.freeze
   OBJECT_WITH_ARGS = 'ObjectWithArgs'.freeze
   OID_LIST = 'OidList'.freeze
+  ON_CONFLICT_CLAUSE = 'OnConflictClause'.freeze
   PARAM_REF = 'ParamRef'.freeze
   PREPARE_STMT = 'PrepareStmt'.freeze
   RANGE_FUNCTION = 'RangeFunction'.freeze
@@ -290,4 +291,7 @@ class PgQuery
   AT_AddIdentity = 63               # ADD IDENTITY
   AT_SetIdentity = 64               # SET identity column options
   AT_DropIdentity = 65              # DROP IDENTITY
+
+  ON_CONFLICT_ACTION_DO_NOTHING = 1
+  ON_CONFLICT_ACTION_DO_UPDATE = 2
 end

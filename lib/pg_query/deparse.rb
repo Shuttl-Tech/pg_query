@@ -150,6 +150,8 @@ class PgQuery
         deparse_nulltest(node)
       when OBJECT_WITH_ARGS
         deparse_object_with_args(node)
+      when ON_CONFLICT_CLAUSE
+        deparse_on_conflict_clause(node)
       when PARAM_REF
         deparse_paramref(node)
       when RANGE_FUNCTION
@@ -1106,6 +1108,31 @@ class PgQuery
       output.join('')
     end
 
+    def deparse_on_conflict_clause(node)
+      output = []
+      output << 'ON CONFLICT'
+
+      if node['infer']
+        # TODO infer clause not implemented yet
+      end
+
+      case node['action']
+      when ON_CONFLICT_ACTION_DO_NOTHING
+        output << 'DO NOTHING'
+      
+      when ON_CONFLICT_ACTION_DO_UPDATE 
+        output << 'DO UPDATE SET'
+
+        columns = node['action']['targetList'].map do |item|
+          deparse_item(item, :update)
+        end
+
+        output << columns.join(', ')
+      end
+
+      output.join(' ')
+    end
+
     def deparse_insert_into(node)
       output = []
       output << deparse_item(node['withClause']) if node['withClause']
@@ -1120,6 +1147,10 @@ class PgQuery
       end
 
       output << deparse_item(node['selectStmt'])
+      
+      if node['onConflictClause']
+        output << deparse_item(node['onConflictClause'])
+      end
 
       output.join(' ')
     end
