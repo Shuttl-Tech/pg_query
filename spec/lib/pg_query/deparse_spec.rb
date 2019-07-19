@@ -559,6 +559,12 @@ describe PgQuery::Deparse do
         it { is_expected.to eq query }
       end
 
+      context 'RETURNING' do
+        let(:query) { 'INSERT INTO "x" SELECT * FROM "y" RETURNING "x"' }
+
+        it { is_expected.to eq query }
+      end
+
       context 'WITH' do
         let(:query) do
           '''

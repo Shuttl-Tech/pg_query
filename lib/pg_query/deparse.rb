@@ -1121,6 +1121,14 @@ class PgQuery
 
       output << deparse_item(node['selectStmt'])
 
+      if node['returningList']
+        output << 'RETURNING'
+        output << node['returningList'].map do |item|
+          # RETURNING is formatted like a SELECT
+          deparse_item(item, :select)
+        end.join(', ')
+      end
+
       output.join(' ')
     end
 
